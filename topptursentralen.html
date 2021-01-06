@@ -1,0 +1,233 @@
+</html>  
+ <head>
+        <meta charset="utf-8">
+        <title>Kartverkets kart</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+
+      <!-- Make sure you put this AFTER Leaflet's CSS -->
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""></script>
+
+  <style>
+    .info {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+    }
+    .info h4 {
+        margin: 0 0 5px;
+        color: #777;
+    }
+    .legend {
+        line-height: 18px;
+        color: #555;
+    }
+    .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+    #slide-in {
+    position: absolute;
+    width: 250px;
+    z-index: 1000;
+    background: white;
+    margin-left: -250;
+    transition: 1.5s;
+    }
+    #slide-in.in {
+      margin-left: 0px;
+    }
+
+  </style>
+
+    </head>
+    <body>
+
+  <div id="slide-in">
+    <h2>Turbeskrivelse</h2>
+  </div>
+  
+<div id="overlay">
+  <h2>Beskrivelse</h2>
+  <button id="mer-info">Mer info</button>
+</div>
+
+  <div id="mapid" style="height: 100%; width: 100%;"></div>
+
+  <script src="https://code.jquery.com-3.5.1.min.js"></script>
+  <script>
+
+
+            var map = L.map('mapid',{scrollWheelZoom:true}).setView([60.8799002, 8.4839034], 11);
+            L.tileLayer('https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}', {
+                attribution: '<a href="http://www.kartverket.no/">Kartverket</a>'
+            }).addTo(map);
+//DATA
+
+//WMS
+
+var bratthet = L.tileLayer.wms('https://gis3.nve.no/map/services/Bratthet/MapServer/WmsServer', {
+    layers: 'Bratthet_snoskred',
+    opacity: 0.4,
+    format: 'image/png',
+    transparent: true,
+});
+
+var aktsomhet= L.tileLayer.wms('https://gis3.nve.no/map/services/SkredSnoAktR/MapServer/WmsServer?', {
+    layers: 'Snoskred-Aktsomhetsomrader',
+opacity: 0.5,
+    format: 'image/png',
+    transparent: true,
+});
+
+var skredhendelser= L.tileLayer.wms('https://gis3.nve.no/map/services/SkredHendelser/MapServer/WmsServer?', {
+    layers: 'Snoskred',
+    format: 'image/png',
+    transparent: true,
+});
+
+var gråtone= L.tileLayer.wms('https://openwms.statkart.no/skwms1/wms.kartdata3graatone?request=GetCapabilities&service=WMS', {
+    layers: 'kartdata3graatone',
+    format: 'image/png',
+    transparent: true,
+});
+
+//ICON
+
+var enkelt = L.icon({
+    iconUrl: 'enkelt.png',
+    iconSize:     [32, 37], // size of the icon
+    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -37] // point from which the popup should open relative to the iconAnchor
+});
+
+var utfordrende = L.icon({
+    iconUrl: 'utfordrende.png',
+    iconSize:     [32, 37], 
+    iconAnchor:   [16, 37], 
+    popupAnchor:  [0, -37] 
+});
+
+var komplekst = L.icon({
+    iconUrl: 'komplekst.png',
+    iconSize:     [32, 37], 
+    iconAnchor:   [16, 37], 
+    popupAnchor:  [0, -37] 
+});
+
+//MENY
+
+var overlayMaps = {
+    'Bratthet': bratthet,
+    'Utløpsområdet': aktsomhet,
+ 'Skredhendelser': skredhendelser,	
+'Topografisk gråtone': gråtone
+};
+
+//Hvilken layers kartet skal vises med initielt
+
+L.control.layers(null, overlayMaps).addTo(map);
+overlayMaps.Bratthet.addTo(map);
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        steep = [27, 30, 35, 40, 45, 50, 90];
+        colors = ['#13711d', '#fff93e', '#ffa228', '#ff4e11', '#f50000', '#7c0000'];
+        labels = ['Degrees'];
+        for (var i = 0; i < steep.length - 1; i++) {
+            labels.push(
+                '<i style="background:' + colors[i] + '"></i> ' +
+                steep[i] + '&ndash;' + steep[i + 1]);
+        }
+        div.innerHTML += labels.join('<br>');
+        return div;
+};
+legend.addTo(map);
+
+var popup1609 = L.popup({
+maxWidth : 500
+})
+    .setLatLng([60.8843036, 8.2088736])
+    .setContent("<a href=https://topptursentralen.no/ski/hemsedal/1609-2//> <img src=https://topptursentralen.no/wp-content/uploads/2020/02/IMG_20180217_140307-scaled.jpg width=320 height=180> <br><b>1609</b><br/><br>1609moh<br>KAST: Utfordrende")
+
+
+//Eksempel
+//L.marker([lat, long]).addTo(mymap)
+		//.bindPopup("<a href=URL/> <img src=URL bilde width=320 height=180> <br><b>Skurvefjell</b><br/>Undertekst");
+
+//HEMSEDAL
+
+    
+
+            //1609
+    var råskårdfjellet = L.marker([60.8843036, 8.2088736], {icon:utfordrende}).addTo(map)
+		.bindPopup(popup1609);
+
+            //Kyrkjebønøse
+    var kyrkjebønøse = L.marker([60.9056056, 8.5559717], {icon:utfordrende}).addTo(map)
+		.bindPopup("<a href=https://topptursentralen.no/ski/hemsedal/kyrkjebonose//> <img src=https://topptursentralen.no/wp-content/uploads/2020/03/P_20200313_144523-scaled.jpg width=320 height=180> <br><b>Kyrkjebønøse</b><br/><br>Undertekst");
+
+            //Skogshorn
+    var skogshorn = L.marker([60.8813231, 8.6941892], {icon:utfordrende}).addTo(map)
+		.bindPopup("<a href=https://topptursentralen.no/ski/hemsedal/skogshorn//> <img src=https://topptursentralen.no/wp-content/uploads/2020/05/Skogshorn-scaled.jpg width=320 height=180> <br><b>Skogshorn</b><br/><br>moh<br>KAST:");
+
+            //Nibbi
+    var nibbi = L.marker([60.8866261, 8.6500606], {icon:enkelt}).addTo(map)
+		.bindPopup("<a href=https://topptursentralen.no/ski/hemsedal/nibbi//> <img src=https://topptursentralen.no/wp-content/uploads/2020/02/IMG_20180105_141136_001_COVER-scaled.jpg width=320 height=180> <br><b>Nibbi</b><br/><br>moh<br>KAST:");
+
+            //Skurvefjell
+    var skurvefjell = L.marker([60.8889323, 8.6073762], {icon:utfordrende}).addTo(map)
+		.bindPopup("<a href=https://topptursentralen.no/ski/hemsedal/skurvefjellet/> <img src=https://topptursentralen.no/wp-content/uploads/2020/05/skurvefjell-2.jpg width=320 height=180> <br><b>Skurvefjell</b><br/><br>moh<br>KAST:");
+
+    var hemsedal = L.featureGroup([kyrkjebonosi,skogshorn,skurvefjell,nibbi,råskardfjellet]).addTo(map)
+
+//JOTUNHEIMEN
+
+//HURRUNGANE
+
+//ROMSDALEN
+
+var geojson = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {}, "geometry": {"type": "LineString", "coordinates": [ [8.674049377441406, 60.86721087362951 ],[8.67271900177002, 60.86781675636348 ],[8.67220401763916, 60.86873600476599 ],[8.67147445678711, 60.869467206189036 ],[8.670186996459961, 60.86988502805588 ],[8.669071197509764, 60.870261063061434 ],[8.669414520263672, 60.870887778229516 ],[8.6661958694458, 60.871159350982104 ],[8.66323471069336, 60.87237095512043 ],[8.662075996398926, 60.87308118444581 ],[8.660831451416016, 60.874606035207464 ],[8.660144805908203, 60.87594283075327 ],[8.659243583679197, 60.87709159470121 ],[8.656539916992188, 60.879472537419495 ],[8.655166625976562, 60.880621174342195 ],[8.653321266174316, 60.88185330253933 ],[8.651947975158691, 60.88279302935775 ],[8.64997386932373, 60.88373272850529 ],[8.649287223815918, 60.88488121210867 ],[8.648900985717773, 60.88577908868112 ],[8.650145530700684, 60.88655165992808 ]]}},{"type": "Feature", "properties": {}, "geometry": {"type": "Point", "coordinates": [ 8.508514165878294, 60.94216933873778 ]}},{"type": "Feature", "properties": {}, "geometry": {"type": "LineString", "coordinates": [ [8.451383113861084, 60.945681299382784 ],[8.466167449951172, 60.94360751783536 ],[8.477411270141602, 60.942982230558954 ],[8.488140106201172, 60.9427321122094 ],[8.496766090393066, 60.942481991894695 ],[8.499555587768555, 60.941043761948265 ],[8.502731323242188, 60.94023082062852 ],[8.505306243896483, 60.94079362836848 ],[8.507280349731444, 60.941544023212174 ],[8.508514165878294, 60.94216673328191 ]]}}]}
+
+L.geoJSON(geojson, {
+  style : function(feature) {
+    return {
+      Color: "#000", //fungerer ikke
+      weight: 2
+    }
+  },
+  pointToLayer: function(geoJsonPoint, latlng) { //denne setter alle Points til samme icon
+    return L.marker(latlng, {
+      icon: enkelt
+    });
+  },
+  oneEachFeature: function(feature, layer) {
+    return L.marker(latlng, {
+      icon: enkelt
+    });
+    
+}
+}).addTo(map);
+
+//Hvordan kartet endrer seg til innholdet
+
+map.fitBounds(hemsedal.getBounds(), {
+padding: [20,20]
+});
+
+        </script>
+    </body>
+</html>
