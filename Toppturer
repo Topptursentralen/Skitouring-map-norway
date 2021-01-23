@@ -5,7 +5,11 @@
       "type": "Feature",
       "properties": {
         "skiArea": "Hemsedal",
-        "skiName": "Råskardfjellet"
+        "skiName": "Råskardfjellet",
+        "skiInfo": "peak",
+        "skiURL": "https://topptursentralen.no/ski/hemsedal/1609-2/",
+        "skiPic": "https://topptursentralen.no/wp-content/uploads/2021/01/DJI_0027-2-scaled-e1610275509546.jpg",
+        "skiKAST": "Utfordrende"
       },
       "geometry": {
         "type": "Point",
@@ -19,7 +23,9 @@
       "type": "Feature",
       "properties": {
         "skiArea": "Hemsedal",
-        "skiName": "Råskardfjellet"
+        "skiName": "Råskardfjellet",
+        "skiInfo": "up",
+        "skiKAST": "Utfordrende"
       },
       "geometry": {
         "type": "LineString",
@@ -123,7 +129,9 @@
       "type": "Feature",
       "properties": {
         "skiArea": "Hemsedal",
-        "skiName": "Hestebottfjellet"
+        "skiName": "Hestebottfjellet",
+        "skiInfo": "peak",
+        "skiKAST": "Utfordrende"
       },
       "geometry": {
         "type": "Point",
@@ -137,7 +145,9 @@
       "type": "Feature",
       "properties": {
         "skiArea": "Hemsedal",
-        "skiName": "Hestebottfjellet"
+        "skiName": "Hestebottfjellet",
+        "skiInfo": "up",
+        "skiKAST": "Utfordrende"
       },
       "geometry": {
         "type": "LineString",
@@ -253,7 +263,9 @@
       "type": "Feature",
       "properties": {
         "skiName": "Storebottskarvet",
-        "skiArea": "Hemsedal"
+        "skiArea": "Hemsedal",
+        "skiInfo": "peak",
+        "skiKAST": "Enkelt"
       },
       "geometry": {
         "type": "Point",
@@ -267,7 +279,9 @@
       "type": "Feature",
       "properties": {
         "skiName": "Storebottskarvet",
-        "skiArea": "Hemsedal"
+        "skiArea": "Hemsedal",
+        "skiInfo": "up",
+        "skiKAST": "Enkelt"
       },
       "geometry": {
         "type": "LineString",
@@ -361,7 +375,12 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "skiName": "Svarthetta",
+        "skiArea": "Hemsedal",
+        "skiInfo": "peak",
+        "skiKAST": "Utfordrende"
+      },
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -372,7 +391,12 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "skiName": "Svarthetta",
+        "skiArea": "Hemsedal",
+        "skiInfo": "up",
+        "skiKAST": "Utfordrende"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -427,6 +451,104 @@
           [
             8.351175785064697,
             60.96714064907077
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "skiName": "Harahorn",
+        "skiArea": "Hemsedal",
+        "skiInfo": "peak",
+        "skiKAST": "Enkelt"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.4943748,
+          60.9393944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "skiArea": "Hemsedal",
+        "skiName": "Harahorn",
+        "skiInfo": "up",
+        "skiKAST": "Enkelt"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.4943748,
+            60.9393944
+          ],
+          [
+            8.49391222000122,
+            60.93935011077389
+          ],
+          [
+            8.493204116821289,
+            60.93925630592184
+          ],
+          [
+            8.49264621734619,
+            60.93914165517179
+          ],
+          [
+            8.49216341972351,
+            60.93915728938928
+          ],
+          [
+            8.491487503051758,
+            60.93920940339217
+          ],
+          [
+            8.491208553314207,
+            60.93924067175297
+          ],
+          [
+            8.490082025527954,
+            60.93905827254882
+          ],
+          [
+            8.489567041397095,
+            60.93902700400889
+          ],
+          [
+            8.488258123397827,
+            60.93939701309628
+          ],
+          [
+            8.485532999038695,
+            60.93995983557573
+          ],
+          [
+            8.479385375976562,
+            60.94118967229559
+          ],
+          [
+            8.475351333618164,
+            60.94252367875027
+          ],
+          [
+            8.47217559814453,
+            60.944045211621045
+          ],
+          [
+            8.467497825622559,
+            60.94504563196126
+          ],
+          [
+            8.462305068969727,
+            60.94523320727475
+          ],
+          [
+            8.45024585723877,
+            60.943638781876786
           ]
         ]
       }
